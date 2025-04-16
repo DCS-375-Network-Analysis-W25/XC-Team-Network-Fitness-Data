@@ -36,6 +36,38 @@ To measure fitness improvement, I used each athlete’s average heart rate and p
 
 The analysis was done using R, with packages like igraph and tidyverse to build the network and explore relationships through visualizations, statistics, and basic modeling.
 
+
+## Key Visualizations
+
+### Network of Training Relationships Colored by Fitness Change
+This plot shows how athletes are connected based on who they trained with. Blue nodes show athletes who improved more (greater drop in HR/Pace), while red indicates less improvement.
+
+![Fitness Network](fitness_network.png)
+
+
+```r
+# Add fitness color to nodes
+colors <- colorRampPalette(c("blue", "white", "red"))(100)
+...
+plot(g, vertex.color = vertex_colors, ...)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Conclusion & Research Limitations 
 
 Overall, this project found that more socially connected athletes didn’t always show greater fitness improvement. While I expected that runners who trained with more teammates might benefit from group motivation or consistency, the data didn’t show a strong relationship between training ties and changes in heart rate-to-pace efficiency. Some athletes with fewer connections improved a lot, and others with strong training networks didn’t. This suggests that while social training might play a role, other factors like individual workload, injury, or recovery may be just as important.
@@ -53,7 +85,4 @@ boyd, d., & Crawford, K. (2011). Six provocations for big data. Retrieved from h
 Knappett, C. (2013). Network analysis in archaeology: New approaches to regional interaction. Oxford University Press.
 
 Weingart, S. (2011). Demystifying Networks. Retrieved from https://scottbot.net/networks-done-right/
-
-
-
 
