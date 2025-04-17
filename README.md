@@ -42,7 +42,7 @@ The analysis was done using R, with packages like igraph and tidyverse to build 
 ### Network of Training Relationships Colored by Fitness Change
 This plot shows how athletes are connected based on who they trained with. Blue nodes show athletes who improved more (greater drop in HR/Pace), while red indicates less improvement.
 
-![Fitness Network](fitness_network.png)
+![Fitness Network](NETWORK.png)
 
 
 ```r
