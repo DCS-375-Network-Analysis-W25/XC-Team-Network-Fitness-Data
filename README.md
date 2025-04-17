@@ -190,9 +190,10 @@ hist(fitness$Fitness_Change,
 This histogram shows how fitness changed for my cross country team from peak to end of season. A lower number means someone improved (their heart rate got lower for their pace), and a higher number means they didn’t. Most of my teammates had a fitness change below zero, showing improvement, with the average around -0.31. The most improved runner had a value close to -1.99, while the least improved was around +1.34. This shows that while most of the team made progress, a few athletes didn’t see the same level of improvement.
 
 
-## Boxplot of Fitness Change by Training Connection Group
+### Fitness Change by Training Connection Group
 
-______insert boxplot fitness change ------
+![Fitness Change Boxplot](FitnessChangeBoxplot.png)
+
 ```{r}
 # Grouping athletes by how many teammates they trained with
 # Low = 0–3 connections, Medium = 4–6, High = 7–10
@@ -210,9 +211,9 @@ boxplot(Fitness_Change ~ DegreeGroup, data = fitness,
 ```
 This boxplot shows how fitness change compares across athletes with low, medium, and high training connection groups. The medium and high groups had a wider range, meaning some athletes improved a lot while others didn’t. The low group had more consistent results, but their fitness change was mostly positive, which actually means they got slightly worse. So being more connected didn’t guarantee better results, but it came with more variability.
 
-# scatterplot 
+### Scatterplot: Training Connections vs. Fitness Change
 
-____insert ______
+![Scatterplot](Scatterplot.png)
 
 ```{r}
 #Network Centrality
@@ -230,14 +231,15 @@ abline(lm(Fitness_Change ~ Degree, data = fitness), col = "red", lty = 2)
 This scatterplot looks at whether more connected athletes (those with more training partners) saw bigger fitness improvements. The x-axis shows how many teammates each person trained with (ranging from 1 to 9 connections), and the y-axis shows their fitness change. The trendline has a slight negative slope, meaning athletes with more connections actually tended to improve a little less. For example, one athlete with 6 training connections had the biggest improvement (around -1.99), while the athlete with the most connections (9) had one of the highest values — close to +1.34 — meaning they didn’t improve as much. So being more connected didn’t always mean better results.
 
 
-# Pearson's product-moment correlation
+### Correlation Test Results
 
-___insert correlation ___
+![Correlation](correlation.png)
 
 I ran a correlation test to see if there was a relationship between how connected someone was and how much their fitness changed. The result was a very weak negative correlation (r = -0.16), meaning there’s almost no relationship between training connections and improvement. The p-value was 0.66, which is way above 0.05, so the result isn’t statistically significant — this means we can’t say there’s a real connection between the two in this sample.
 
-# Regression 
- ___ isnert_____
+### Simple Linear Regression Results
+
+![Regression](regression.png)
 
  ```{r}
 #simple regression
@@ -246,9 +248,9 @@ summary(model)
 ```
 I also ran a simple linear regression to see if training connections (Degree) could predict changes in fitness. The results showed a small negative slope (Estimate = -0.055), meaning that for each extra training connection, fitness change slightly decreased — but the effect was super weak. The p-value was 0.66, which means the result isn’t statistically significant, and the R-squared value was only 0.03. So overall, this model doesn’t explain much — how connected someone was didn’t really predict whether they improved.
 
-#five number summery 
+### Five Number Summary of Fitness Change
 
-___ insert_ __
+![Five Number Summary](fivenumbersummary.png)
 
 ```{r}
 # 5-number summary for fitness change
