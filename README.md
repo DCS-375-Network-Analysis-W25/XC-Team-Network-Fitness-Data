@@ -101,7 +101,9 @@ plot(g,
 ```
 This network shows how socially connected each athlete is based on the number of people they regularly or occasionally trained with. Athletes with more training connections are shown in brighter colors, while less connected athletes appear darker. For example, Athlete F is one of the most connected runners on the team, while Athlete G trained with fewer teammates and sits more on the edge of the network.
 
-____insert 3: fitness change______
+### Fitness Change Over the Season
+
+![Fitness Change](FitnessChange.png)
 
 ```{r}
 # Calculating Fitness_Change
@@ -120,7 +122,9 @@ sd(fitness$Fitness_Change, na.rm = TRUE)
 ```
 On average, athletes on my team showed a small improvement in fitness over the season, with a mean HR/Pace change of -0.31. The majority of runners had negative values, meaning their heart rate got lower for the same pace — a sign of improved efficiency. However, the range was wide (from -1.99 to +1.34), and the standard deviation of 0.97 shows that the amount of improvement varied a lot from person to person.
 
----insert 4 barplot ---
+### Barplot of Training Connections per Athlete
+
+![Barplot of Training Connections](BarplotTrainingConnections.png)
 
 ```{r}
 # Calculate degree (number of training connections) for each athlete and add it to fitness dataframe
@@ -136,7 +140,9 @@ barplot(sort(fitness$Degree, decreasing = TRUE),
 ```
 This bar plot shows how many teammates each athlete trained with during the season. A higher number means they were more connected and trained with more people. It’s based on how often others said they trained with them, either regularly or occasionally. Athletes like F, A, and B were some of the most connected, while athletes like C and G trained with fewer teammates, possibly sticking to smaller groups or doing more runs on their own. Athlete F had the most connections (9), while Athlete G had the fewest (1) and most athletes trained with 4–8 teammates.
 
----centraility insert ---
+### Centrality Scores by Athlete
+
+![Centrality Scores](CentralityScores.png)
 
 ```{r}
 # Calculating how central each athlete is in this training network
@@ -156,8 +162,9 @@ barplot(sort(fitness$Centrality, decreasing = TRUE),
 ```
 This plot shows how central each athlete is in the team’s training network. Athletes like Athlete F and Athlete B had the highest centrality, meaning they trained with teammates who were also highly connected. This puts them at the core of the group’s training web. On the other end, athletes like Athlete G and Athlete C were more on the edges — they had fewer connections to teammates who were themselves well-connected. Centrality helps highlight who might’ve been at the social or motivational center of team workouts.
 
+### Distribution of Fitness Change
 
-____distribution of fitnes change--
+![Distribution of Fitness Change](Distribution%20of%20Fitness%20Change.png)
 
 
 ```{r}
@@ -183,7 +190,71 @@ hist(fitness$Fitness_Change,
 This histogram shows how fitness changed for my cross country team from peak to end of season. A lower number means someone improved (their heart rate got lower for their pace), and a higher number means they didn’t. Most of my teammates had a fitness change below zero, showing improvement, with the average around -0.31. The most improved runner had a value close to -1.99, while the least improved was around +1.34. This shows that while most of the team made progress, a few athletes didn’t see the same level of improvement.
 
 
+## Boxplot of Fitness Change by Training Connection Group
 
+______insert boxplot fitness change ------
+```{r}
+# Grouping athletes by how many teammates they trained with
+# Low = 0–3 connections, Medium = 4–6, High = 7–10
+fitness$DegreeGroup <- cut(fitness$Degree,
+                           breaks = c(0, 3, 6, 10),
+                           labels = c("Low", "Medium", "High"))
+
+# Making a boxplot to compare fitness change across those 3 groups
+boxplot(Fitness_Change ~ DegreeGroup, data = fitness,
+        main = "Fitness Change by Training Connection Group",
+        ylab = "HR/Pace Change",
+        col = "orange")  # makes the plot orange
+
+
+```
+This boxplot shows how fitness change compares across athletes with low, medium, and high training connection groups. The medium and high groups had a wider range, meaning some athletes improved a lot while others didn’t. The low group had more consistent results, but their fitness change was mostly positive, which actually means they got slightly worse. So being more connected didn’t guarantee better results, but it came with more variability.
+
+# scatterplot 
+
+____insert ______
+
+```{r}
+#Network Centrality
+# Calculating degree (number of connections)
+fitness$Degree <- degree(g)
+
+# Scatterplot: Degree vs Fitness Improvement
+plot(fitness$Degree, fitness$Fitness_Change,
+     main = "Do More Connected Athletes Improve More?",
+     xlab = "Training Connections (Degree)",
+     ylab = "Fitness Change (HR/Pace)")
+abline(lm(Fitness_Change ~ Degree, data = fitness), col = "red", lty = 2)
+
+```
+This scatterplot looks at whether more connected athletes (those with more training partners) saw bigger fitness improvements. The x-axis shows how many teammates each person trained with (ranging from 1 to 9 connections), and the y-axis shows their fitness change. The trendline has a slight negative slope, meaning athletes with more connections actually tended to improve a little less. For example, one athlete with 6 training connections had the biggest improvement (around -1.99), while the athlete with the most connections (9) had one of the highest values — close to +1.34 — meaning they didn’t improve as much. So being more connected didn’t always mean better results.
+
+
+# Pearson's product-moment correlation
+
+___insert correlation ___
+
+I ran a correlation test to see if there was a relationship between how connected someone was and how much their fitness changed. The result was a very weak negative correlation (r = -0.16), meaning there’s almost no relationship between training connections and improvement. The p-value was 0.66, which is way above 0.05, so the result isn’t statistically significant — this means we can’t say there’s a real connection between the two in this sample.
+
+# Regression 
+ ___ isnert_____
+
+ ```{r}
+#simple regression
+model <- lm(Fitness_Change ~ Degree, data = fitness)
+summary(model)
+```
+I also ran a simple linear regression to see if training connections (Degree) could predict changes in fitness. The results showed a small negative slope (Estimate = -0.055), meaning that for each extra training connection, fitness change slightly decreased — but the effect was super weak. The p-value was 0.66, which means the result isn’t statistically significant, and the R-squared value was only 0.03. So overall, this model doesn’t explain much — how connected someone was didn’t really predict whether they improved.
+
+#five number summery 
+
+___ insert_ __
+
+```{r}
+# 5-number summary for fitness change
+summary(fitness$Fitness_Change)
+```
+This 5-number summary gives a clear picture of how fitness changed across my team from peak to end of season. The minimum value was -1.99, meaning one athlete showed a big improvement — their heart rate dropped significantly for the same pace. The first quartile was -0.62, and the median was -0.52, which tells us that at least half of the team improved by a noticeable amount. The third quartile was 0.36, meaning that while most runners saw some improvement, a smaller group either stayed the same or got slightly less efficient. The maximum value was 1.34, showing that one athlete’s fitness actually declined. Overall, this summary shows that the majority of the team improved, but the amount of improvement varied widely.
 
 
 ## Conclusion & Research Limitations 
