@@ -36,6 +36,18 @@ To measure fitness improvement, I used each athlete’s average heart rate and p
 
 The analysis was done using R, with packages like igraph and tidyverse to build the network and explore relationships through visualizations, statistics, and basic modeling.
 
+## Excel Data Snapshots
+
+Here’s a quick look at what the cleaned data files looked like
+
+**Training Connections (Edge List):**
+
+![Training Connections Excel Sheet](TrainingEdgeList.png)
+
+**Fitness Data (Heart Rate and Pace Stats):**
+
+![Fitness Data Excel Sheet](FitnessData.png)
+
 
 ## Key Visualizations
 
@@ -44,14 +56,24 @@ This plot shows how athletes are connected based on who they trained with. Blue 
 
 ![Fitness Network](NETWORK.png)
 
+### Visualization 1: Training Network Colored by Fitness Change
 
-```r
-# Add fitness color to nodes
+This plot shows how athletes are socially connected based on who they trained with, and how their fitness changed from peak to end of season. Blue nodes improved more (greater drop in HR/Pace), and red nodes improved less.
+
+```{r}
+# Set node colors based on fitness improvement
 colors <- colorRampPalette(c("blue", "white", "red"))(100)
-...
-plot(g, vertex.color = vertex_colors, ...)
+fitness_range <- range(V(g)$Fitness_Change, na.rm = TRUE)
+color_index <- round((V(g)$Fitness_Change - fitness_range[1]) / diff(fitness_range) * 99) + 1
+vertex_colors <- colors[color_index]
 
-
+# Plot the training network
+plot(g,
+     vertex.label = V(g)$label,        # athlete names (Athlete A, B, etc.)
+     vertex.size = 10,                 
+     vertex.color = vertex_colors,     # color based on fitness change
+     edge.width = E(g)$Strength)        # edge width based on training strength
+```
 
 
 
